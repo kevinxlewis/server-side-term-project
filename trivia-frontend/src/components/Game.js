@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 function Game(props) {
-
 	const [questions, setQuestions] = useState(props.questionList);
+
 
 	/*
 	Method to randomize and shuffle question array.
@@ -24,7 +24,7 @@ function Game(props) {
 	return (
 		<div>
 			<h1>Welcome to Trivia.io!</h1>
-		  {questions.slice(0, 5).map((question) => (
+			{questions.slice(0, 5).map((question) => (
 			<div key={question._id}>
 			  <h3>{question.questionText}</h3>
 				{question.options.map((option, index) => (
@@ -34,5 +34,6 @@ function Game(props) {
 		  ))}
 		</div>
 	);
+
 }
 export default Game;
