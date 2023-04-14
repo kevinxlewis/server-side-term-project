@@ -1,3 +1,4 @@
+import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 
 function SplashScreen() {
@@ -11,7 +12,7 @@ function SplashScreen() {
     return (
     <div>
         <h1>Trivia.io</h1>
-        <button onClick={navigateToGamePage}>Play!</button>
+        <Button variant="success" onClick={navigateToGamePage}>Play!</Button>
     </div>
     )
 }

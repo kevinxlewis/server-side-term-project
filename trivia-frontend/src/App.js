@@ -3,6 +3,7 @@ import Game from "./components/Game.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import SplashScreen from "./components/SplashScreen.js";
 import { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
