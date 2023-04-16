@@ -5,60 +5,71 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 
 function Game(props) {
+	const currentDate = new Date;
 	const navigate = useNavigate();
+	const singleDay = 24 * 60 * 60 * 1000;
 	const [score, setScore] = useState(0);
+	const [canPlay, setCanPlay] = useState(true);
+	const lastAttempt = window.localStorage.getItem("LAST_PLAYED")
 	const [questionsAnswered, setQuestionsAnswered] = useState(0);
 	const [questions, setQuestions] = useState(props.questionList);
 	const [numOfIncorrectAnswers, setNumOfIncorrectAnswers] = useState(0);
 	const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
-
+	
+	
 	useEffect(() => {
 		shuffleQuestionArray();
 	}, []);
-
-
-	//TODO => need to fix this so that localStorage values DON'T reset after a re-render.
+	
+	
 	useEffect(() => {
 		window.localStorage.setItem("SCORE", JSON.stringify(score));
 		window.localStorage.setItem("NUMBER_OF_CORRECT_ANSWERS", JSON.stringify(numberOfCorrectAnswers));
-		localStorage.setItem("NUMBER_OF_INCORRECT_ANSWERS",JSON.stringify(numOfIncorrectAnswers));
+		window.localStorage.setItem("NUMBER_OF_INCORRECT_ANSWERS",JSON.stringify(numOfIncorrectAnswers));
+		window.localStorage.setItem("LAST_PLAYED", currentDate);
+		
 	}, [score, numberOfCorrectAnswers, numOfIncorrectAnswers]);
-
-
+	
+	
 	useEffect(() => {
 		const storedScore = localStorage.getItem("SCORE");
-		const storedNumberOfCorrectAnswers = localStorage.getItem(
-			"NUMBER_OF_CORRECT_ANSWERS"
-		);
-		const storedNumberOfIncorrectAnswers = localStorage.getItem(
-			"NUMBER_OF_INCORRECT_ANSWERS"
-		);
-
+		const storedNumberOfCorrectAnswers = localStorage.getItem("NUMBER_OF_CORRECT_ANSWERS");
+		const storedNumberOfIncorrectAnswers = localStorage.getItem("NUMBER_OF_INCORRECT_ANSWERS");
+			
 		if (storedScore !== null) {
 			setScore(JSON.parse(storedScore));
 		}
-
+		
 		if (storedNumberOfCorrectAnswers !== null) {
 			setNumberOfCorrectAnswers(JSON.parse(storedNumberOfCorrectAnswers));
 		}
-
+		
 		if (storedNumberOfIncorrectAnswers !== null) {
-			setNumOfIncorrectAnswers(
-				JSON.parse(storedNumberOfIncorrectAnswers)
-			);
+			setNumOfIncorrectAnswers(JSON.parse(storedNumberOfIncorrectAnswers));
 		}
+
 	}, []);
 
 
+	useEffect(() => {
+		if (lastAttempt) {
+		  const diff = new Date(currentDate) - new Date(lastAttempt);
+		  const daysSinceLastAttempt = Math.floor(diff / singleDay);
+		  
+		  if (daysSinceLastAttempt < 1) {
+			setCanPlay(false);
+		  }
+		}
+	  }, []);
+
+				
 	function navigateToSplashScreen() {
 		navigate("/");
 	}
-
-
+				
+				
 	function shuffleQuestionArray() {
-		const shuffledQuestions = [...questions].sort(
-			() => Math.random() - 0.5
-		);
+		const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
 		setQuestions(shuffledQuestions);
 	}
 
@@ -76,7 +87,34 @@ function Game(props) {
 
 		setQuestions(questions.slice(1));
 		setQuestionsAnswered(questionsAnswered + 1);
+		
 	}
+
+
+	if (!canPlay) {
+		return (
+			<div>
+				<Card style={{
+					marginTop: "15px",
+					marginLeft: "50px",
+					marginRight: "50px",
+					border: "2px solid #011627",
+					backgroundColor: "#495057",
+				}}>
+					<h1>Trivia.io</h1>
+					<h6>Sorry, you have already played today. Try again tomorrow!</h6>
+				</Card>
+				<Button
+					style={{ marginTop: "10px", border: "2px solid black" }}
+					variant="danger"
+					onClick={() => navigateToSplashScreen()}
+				>
+					Exit
+				</Button>
+			</div>
+		);
+	}
+
 
 	return (
 		<div>
@@ -90,7 +128,7 @@ function Game(props) {
 				}}
 			>
 				<Card.Title>
-					<h1>Welcome to Trivia.io!</h1>
+					<h1>Trivia.io</h1>
 				</Card.Title>
 				<Card.Text>
 					{questionsAnswered < 5 ? (
@@ -132,9 +170,10 @@ function Game(props) {
 							<h4>
 								Congratulations, you have completed the game!
 							</h4>
-							<h2>Final Score: {score}</h2>
+							<h2>Final Score: {score}/5</h2>
 						</div>
 					)}
+					
 				</Card.Text>
 			</Card>
 

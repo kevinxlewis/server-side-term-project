@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 function Stats() {
 	const navigate = useNavigate();
 
-
 	function navigateToSplashScreen() {
 		navigate("/");
 	}
@@ -32,14 +31,10 @@ function Stats() {
 						<br></br>
 						<h4>Score: {localStorage.getItem("SCORE")}</h4>
 						<h4>
-							Correct Answers:{" "}
-							{localStorage.getItem("NUMBER_OF_CORRECT_ANSWERS")}
+							Correct Answers: {localStorage.getItem("NUMBER_OF_CORRECT_ANSWERS")}
 						</h4>
 						<h4>
-							Incorrect Answers:{" "}
-							{localStorage.getItem(
-								"NUMBER_OF_INCORRECT_ANSWERS"
-							)}
+							Incorrect Answers: {localStorage.getItem("NUMBER_OF_INCORRECT_ANSWERS")}
 						</h4>
 					</Card.Text>
 				</Card.Body>
