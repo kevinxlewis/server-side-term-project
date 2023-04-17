@@ -50,7 +50,8 @@ function Game(props) {
 
 	}, []);
 
-
+	// Checking to see if user can play again, if the days since the last attempt are less
+	// than 1, the game will not be playable. 
 	useEffect(() => {
 		if (lastAttempt) {
 		  const diff = new Date(currentDate) - new Date(lastAttempt);
@@ -90,7 +91,8 @@ function Game(props) {
 		
 	}
 
-
+	// If the user has played already, this screen will show them a message that
+	// they have played previously, and to come back the next day to play again.
 	if (!canPlay) {
 		return (
 			<div>
@@ -102,7 +104,7 @@ function Game(props) {
 					backgroundColor: "#495057",
 				}}>
 					<h1>Trivia.io</h1>
-					<h6>Sorry, you have already played today. Try again tomorrow!</h6>
+					<h6>Oh! It looks like you've met your question quota for today. Come back tomorrow to see what else you know!</h6>
 				</Card>
 				<Button
 					style={{ marginTop: "10px", border: "2px solid black" }}
